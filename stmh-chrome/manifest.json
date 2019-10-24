@@ -1,0 +1,27 @@
+﻿{
+   "name": "视听魔盒",
+   "version": "0.0.1",
+   "manifest_version": 2,
+   "homepage_url": "https://zcjun.com",
+    "description": "集音乐、视频、壁纸于一体的三合一浏览器插件。本扩展工具封装视频二次解析与MkOnlinePlayer以及同作者作品壁纸网站。",
+    "icons":
+  {
+    "16": "icon_16x16.png",
+    "48": "icon_48x48.png",
+    "128": "icon_128x128.png"
+  },
+   "browser_action":
+{
+	"default_title": "视听畅享，为所欲为！！By zcjun.com",
+	"default_popup": "popup.html"
+},
+"content_scripts": [ {
+     "js": [ "js/jx.js"],
+     "matches": ["*://*.iqiyi.com/*", "*://*.youku.com/*", "*://*.le.com/*","*://*.mgtv.com/*","*://v.qq.com/*","*://*.sohu.com/*","*://*.wasu.cn/*","*://*.pptv.com/*"],
+     "run_at": "document_end"
+  }],
+   "background":{
+      "scripts": ["js/background.js"]
+   },
+   "permissions": ["contextMenus","tabs","http://*/","https://*/"]
+}
