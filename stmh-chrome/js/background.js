@@ -21,4 +21,9 @@ chrome.contextMenus.create({
     chrome.tabs.create({url: './pic.html'});
   }
 })
-
+chrome.contextMenus.create({
+	title: "小游戏，开心娱乐~",
+	onclick: function(){
+		chrome.tabs.create({url: './game.html'});
+	}
+})

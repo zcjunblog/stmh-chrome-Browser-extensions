@@ -1,6 +1,6 @@
 ﻿{
    "name": "视听魔盒",
-   "version": "0.0.1",
+   "version": "0.0.2",
    "manifest_version": 2,
    "homepage_url": "https://zcjun.com",
     "description": "集音乐、视频、壁纸于一体的三合一浏览器插件。本扩展工具封装视频二次解析与MkOnlinePlayer以及同作者作品壁纸网站。",

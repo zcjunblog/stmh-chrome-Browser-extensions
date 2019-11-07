@@ -315,7 +315,8 @@ body {
     color: #C33;
 }
 
-.panel-body .hotlist {}
+.panel-body .hotlist {
+}
 
 .panel-body .hotlist li {
     font-size: 14px;
@@ -471,15 +472,22 @@ body {
         padding: 20px 0 10px;
     }
 }
-.ruKou{
+
+.ruKou {
     text-align: center;
 }
-.ruKou a{
+
+.ruKou a {
     color: #C33;
     font-weight: 700;
 }
+
 .ruKou a:nth-child(2) {
-    margin:0 20px;
+    margin: 0 10px 0 20px;
+}
+
+.ruKou a:nth-child(3) {
+    margin: 0 20px 0 10px;
 }
 
 .donate {
@@ -535,9 +543,11 @@ body {
     margin-left: 2em;
 }
 
-.donate table tr {}
+.donate table tr {
+}
 
-.donate table td {}
+.donate table td {
+}
 
 .donate table .input {
     padding-top: 4px;
