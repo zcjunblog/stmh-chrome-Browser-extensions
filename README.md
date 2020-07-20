@@ -1,3 +1,4 @@
+GET /repos/:owner/:repo/releases
 ## 集音乐、视频、壁纸、游戏于一体的四合一浏览器插件。
 本扩展工具封装视频解析在线游戏与MkOnlinePlayer以及同作者作品壁纸网站。
 
