@@ -25,6 +25,22 @@ export async function verifyWebpageParser(context, base, outputDir) {
       exact: true,
     });
     await button.waitFor();
+    const syntheticTabPromise = context
+      .waitForEvent("page", { timeout: 2000 })
+      .catch(() => null);
+    await source.evaluate(() =>
+      document
+        .getElementById("stmh-page-parser")
+        .shadowRoot.querySelector("button")
+        .click(),
+    );
+    const syntheticTab = await syntheticTabPromise;
+    if (syntheticTab) await syntheticTab.close();
+    assert.equal(
+      !!syntheticTab,
+      false,
+      "Host-page scripts must not trigger forwarding without a trusted user click.",
+    );
     const tabPromise = context.waitForEvent("page");
     await button.click();
     const parsed = await tabPromise;

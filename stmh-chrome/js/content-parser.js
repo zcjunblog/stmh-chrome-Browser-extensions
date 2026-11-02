@@ -36,7 +36,9 @@
     dismissed = location.href;
     host.style.display = "none";
   });
-  button.addEventListener("click", async () => {
+  button.addEventListener("click", async (event) => {
+    // The host page can access this DOM; only a genuine user click may forward its URL.
+    if (!event.isTrusted) return;
     button.disabled = true;
     status.textContent = "";
     try {
