@@ -19,6 +19,9 @@ def package(source, output):
         raise ValueError('需要有效的 MV3 manifest 与三段式版本号。')
     required = {'manifest.json', manifest['background']['service_worker'], manifest['action']['default_popup']}
     required.update(manifest.get('icons', {}).values())
+    for script in manifest.get('content_scripts', []):
+        required.update(script.get('js', []))
+        required.update(script.get('css', []))
     files = sorted(p for p in source.rglob('*') if not any(part.startswith('.') for part in p.relative_to(source).parts))
     for file in files:
         if file.is_symlink():

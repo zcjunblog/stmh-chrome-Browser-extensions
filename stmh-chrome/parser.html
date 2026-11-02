@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>网页视频解析 · 视听魔盒</title>
+    <link rel="stylesheet" href="css/toolbox.css" />
+    <script type="module" src="js/parser-page.mjs"></script>
+  </head>
+  <body class="parser-page">
+    <header class="parser-header">
+      <a class="brand" href="popup.html"
+        ><span class="brand-mark" aria-hidden="true">m<span>•</span></span
+        ><span class="brand-name"
+          >视听魔盒<small>WEB VIDEO PARSER</small></span
+        ></a
+      ><a class="muted" href="toolbox.html?tool=video">本地播放器 ↗</a>
+    </header>
+    <main class="parser-main">
+      <p class="eyebrow">VIDEO / ONE CLICK</p>
+      <h1>打开视频网页，一键解析。</h1>
+      <p class="muted intro">
+        无需导入文件。也可以直接在视频播放页点击「m•
+        一键解析」，或使用右键菜单。
+      </p>
+      <form id="parser-form" class="parser-form">
+        <label for="page-url">视频网页地址</label
+        ><input
+          id="page-url"
+          type="url"
+          required
+          maxlength="4096"
+          placeholder="粘贴爱奇艺、腾讯视频、优酷、芒果TV或B站播放页网址"
+          autocomplete="off"
+        /><button class="primary" type="submit">
+          一键解析 <span aria-hidden="true">↗</span>
+        </button>
+      </form>
+      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      <div class="provider-box">
+        <span class="field-label">内置免费线路</span>
+        <h2>TXNP 弹幕播放器 <span class="pill">第三方服务</span></h2>
+        <p class="muted">
+          点击后，会将视频播放页网址发送给这条线路，并在新标签页打开。插件不读取或发送登录
+          Cookie。
+        </p>
+        <a href="https://art.txnp.cn/" target="_blank" rel="noopener noreferrer"
+          >查看服务页面 ↗</a
+        >
+      </div>
+      <div class="parser-notes">
+        <h2>这次验证到了哪里？</h2>
+        <p>
+          2026-11-03
+          实测：爱奇艺公开预告片、B站公开视频已成功播放。其他平台尚未完成播放验证；不保证所有视频都可解析，也不保证能播放会员内容。
+        </p>
+        <p>
+          若线路维护、内容受限或解析失败，可返回原站播放。插件内置的是解析入口，播放由第三方服务提供。
+        </p>
+      </div>
+      <footer class="page-footer">
+        <span>视听魔盒 · Zeno Zhao</span
+        ><a
+          href="https://github.com/zcjunblog/stmh-chrome-Browser-extensions"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub ↗</a
+        >
+      </footer>
+    </main>
+  </body>
+</html>

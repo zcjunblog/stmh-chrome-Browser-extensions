@@ -1,19 +1,38 @@
 {
   "manifest_version": 3,
   "name": "视听魔盒 · 音乐、视频、壁纸与导航",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "minimum_chrome_version": "120",
-  "description": "本地音乐歌单、视频播放与截图、高清壁纸生成、常用网站收藏。核心功能离线可用，无需账号。",
+  "description": "视频网页一键解析：内置免费第三方线路，支持悬浮按钮、右键与工具栏操作；另含本地媒体、壁纸和导航工具。",
   "homepage_url": "https://github.com/zcjunblog/stmh-chrome-Browser-extensions",
   "icons": {
     "16": "icon_16x16.png",
     "48": "icon_48x48.png",
     "128": "icon_128x128.png"
   },
-  "action": { "default_title": "打开视听魔盒", "default_popup": "popup.html" },
-  "background": { "service_worker": "js/background.js", "type": "module" },
+  "action": {
+    "default_title": "打开视听魔盒",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "js/background.js",
+    "type": "module"
+  },
   "permissions": ["storage", "contextMenus", "activeTab"],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'self';"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.iqiyi.com/*",
+        "*://v.qq.com/*",
+        "*://v.youku.com/*",
+        "*://*.mgtv.com/*",
+        "*://*.bilibili.com/*"
+      ],
+      "js": ["js/content-parser.js"],
+      "run_at": "document_idle"
+    }
+  ]
 }
