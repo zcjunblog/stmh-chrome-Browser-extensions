@@ -1,13 +1,18 @@
-/**
- * @Created By zcjun.com
- * @date 2019/10/22
- * @Description:
- */
-$(function(){
-  $("#donate_open").click(function(){
-    $("#donate").show()
-  });
-  $("#donate_close").click(function(){$("#donate").hide()});
-  $('input[name="money"]').change(function(){var val=$(this).val();
-  if(val==1){$("#donate_code").attr("src","https://old.zcjun.com/content/uploadfile/tpl_options//dszfb.jpg")}else{if(val==2){$("#donate_code").attr("src","https://old.zcjun.com/content/uploadfile/tpl_options//dswx.jpg")}}});
-})
+document.querySelector("#save-current").addEventListener("click", async () => {
+  const feedback = document.querySelector("#feedback");
+  try {
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    const result = await chrome.runtime.sendMessage({
+      type: "bookmark:add",
+      item: { title: tab?.title, url: tab?.url },
+    });
+    if (!result.ok) throw new Error(result.error);
+    feedback.textContent = "已收藏，在「随手直达」中查看。";
+  } catch (error) {
+    feedback.textContent =
+      error.message || "此页面暂不支持收藏，请在普通网页重试。";
+  }
+});

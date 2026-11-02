@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>视听魔盒</title>
+    <link rel="stylesheet" href="css/toolbox.css" />
+    <script type="module" src="js/app.mjs"></script>
+  </head>
+  <body class="toolbox">
+    <aside class="sidebar">
+      <a class="brand" href="?tool=music"
+        ><span class="brand-mark" aria-hidden="true">m<span>•</span></span
+        ><span class="brand-name">视听魔盒<small>MEDIA TOOLBOX</small></span></a
+      >
+      <p class="sidebar-label">你的片刻闲暇</p>
+      <nav aria-label="工具分类">
+        <a href="?tool=music" data-tool="music"
+          ><span aria-hidden="true">♫</span>音乐<span class="nav-index"
+            >01</span
+          ></a
+        >
+        <a href="?tool=video" data-tool="video"
+          ><span aria-hidden="true">▷</span>视频<span class="nav-index"
+            >02</span
+          ></a
+        >
+        <a href="?tool=wallpaper" data-tool="wallpaper"
+          ><span aria-hidden="true">◒</span>壁纸<span class="nav-index"
+            >03</span
+          ></a
+        >
+        <a href="?tool=navigation" data-tool="navigation"
+          ><span aria-hidden="true">⌘</span>导航<span class="nav-index"
+            >04</span
+          ></a
+        >
+      </nav>
+      <div class="sidebar-bottom">
+        <p>把喜欢的，<br />放在手边。</p>
+        <small><i class="status-dot"></i>本地运行 · 无需账号</small
+        ><a
+          href="https://github.com/zcjunblog/stmh-chrome-Browser-extensions"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Zeno Zhao / GitHub ↗</a
+        >
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="page-top">
+        <span id="breadcrumb">视听魔盒 / 音乐</span
+        ><span class="version">VERSION 1.0</span>
+      </header>
+      <section id="media-panel" aria-labelledby="media-heading">
+        <div class="section-heading">
+          <p id="media-eyebrow" class="eyebrow">01 / MUSIC</p>
+          <h1 id="media-heading">让喜欢的声音，陪你一会。</h1>
+          <p id="media-description" class="muted">
+            选择本地音频，给今天配一段自己的背景音乐。
+          </p>
+        </div>
+        <div class="media-layout">
+          <div class="player-card">
+            <div id="music-art" class="music-art">
+              <div class="record">
+                <div class="record-label">
+                  <span>m<span class="orange">•</span></span
+                  ><small>YOUR DAILY SOUNDTRACK</small>
+                </div>
+              </div>
+              <span class="art-caption">SLOW DOWN. PRESS PLAY.</span>
+            </div>
+            <video id="video" playsinline preload="metadata" hidden></video
+            ><audio id="audio" preload="metadata"></audio>
+            <div class="player-body">
+              <p class="eyebrow" id="now-label">NOW PLAYING</p>
+              <h2 id="media-title">还没有添加音乐</h2>
+              <p id="media-subtitle" class="muted">
+                文件只在本机读取，不会上传。
+              </p>
+              <div class="seek-line">
+                <span id="elapsed">0:00</span
+                ><input
+                  id="seek"
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="0"
+                  step="0.1"
+                  aria-label="播放进度"
+                  disabled
+                /><span id="duration">0:00</span>
+              </div>
+              <div class="transport">
+                <button
+                  id="previous"
+                  class="icon-button"
+                  aria-label="上一首"
+                  disabled
+                >
+                  ‹</button
+                ><button
+                  id="play"
+                  class="play-button"
+                  aria-label="播放"
+                  disabled
+                >
+                  ▶</button
+                ><button
+                  id="next"
+                  class="icon-button"
+                  aria-label="下一首"
+                  disabled
+                >
+                  ›</button
+                ><label class="speed-label"
+                  >倍速<select id="speed" aria-label="播放速度">
+                    <option value="0.5">0.5×</option>
+                    <option value="0.75">0.75×</option>
+                    <option value="1" selected>1×</option>
+                    <option value="1.25">1.25×</option>
+                    <option value="1.5">1.5×</option>
+                    <option value="2">2×</option>
+                  </select></label
+                ><button
+                  id="repeat"
+                  class="icon-button repeat"
+                  aria-label="单曲循环"
+                  aria-pressed="false"
+                >
+                  ↻
+                </button>
+              </div>
+              <div class="volume-row">
+                <label for="volume">音量</label
+                ><input
+                  type="range"
+                  id="volume"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value="0.8"
+                /><button id="capture" class="text-button" hidden>
+                  保存当前画面</button
+                ><button id="fullscreen" class="text-button" hidden>
+                  全屏
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="queue-card">
+            <div class="queue-heading">
+              <h2 id="queue-title">我的歌单</h2>
+              <span id="queue-count" class="pill">0 首</span>
+            </div>
+            <label class="file-picker" id="drop-zone" for="media-files"
+              ><span aria-hidden="true">＋</span
+              ><strong id="picker-title">选择音频文件</strong
+              ><small>也可以把文件拖到这里</small
+              ><input
+                type="file"
+                id="media-files"
+                accept="audio/*,.mp3,.wav,.ogg,.m4a,.flac"
+                multiple
+            /></label>
+            <ol id="playlist" class="playlist"></ol>
+            <p class="queue-note">
+              播放进度保存在本机。下次重新选择同一文件，即可继续播放。
+            </p>
+            <form id="direct-form" hidden>
+              <label for="direct-url">媒体直链</label>
+              <div class="form-row">
+                <input
+                  id="direct-url"
+                  type="url"
+                  placeholder="https://example.com/video.mp4"
+                  autocomplete="off"
+                /><button class="primary" type="submit">打开</button>
+              </div>
+              <small
+                >支持浏览器可播放的 HTTP(S)
+                音视频地址，不支持视频网站页面解析。</small
+              >
+            </form>
+            <p class="format-note" id="format-note">
+              格式支持取决于浏览器，一般可播放 MP3、WAV、OGG 等。
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="wallpaper-panel" aria-labelledby="wallpaper-heading" hidden>
+        <div class="section-heading">
+          <p class="eyebrow">03 / WALLPAPER</p>
+          <h1 id="wallpaper-heading">换个桌面，换个心情。</h1>
+          <p class="muted">六种内置风格，一点颜色，让屏幕重新呼吸。</p>
+        </div>
+        <div class="wallpaper-preview">
+          <canvas
+            id="wallpaper-canvas"
+            width="1280"
+            height="720"
+            aria-label="壁纸预览"
+          ></canvas
+          ><span class="preview-label">LIVE PREVIEW / 本地生成</span>
+        </div>
+        <div class="wallpaper-controls">
+          <div>
+            <span class="field-label">选择风格</span>
+            <div id="wallpaper-styles" class="style-options"></div>
+          </div>
+          <div class="wallpaper-export">
+            <label for="wallpaper-size">导出尺寸</label
+            ><select id="wallpaper-size">
+              <option value="1920x1080">1920 × 1080 / Full HD</option>
+              <option value="2560x1440">2560 × 1440 / 2K</option>
+              <option value="3840x2160">3840 × 2160 / 4K</option></select
+            ><button id="download-wallpaper" class="primary">↓ 下载壁纸</button>
+          </div>
+        </div>
+        <p class="muted footnote">
+          PNG
+          图片保存到下载目录；插件不会更改系统壁纸。所有图案由本地程序绘制，无需联网。
+        </p>
+      </section>
+      <section
+        id="navigation-panel"
+        aria-labelledby="navigation-heading"
+        hidden
+      >
+        <div class="section-heading">
+          <p class="eyebrow">04 / NAVIGATION</p>
+          <h1 id="navigation-heading">常用的，放在手边。</h1>
+          <p class="muted">少找一次网址，多留一点时间给自己。</p>
+        </div>
+        <div class="navigation-toolbar">
+          <h2>常用网站</h2>
+          <label class="search-field"
+            ><span class="sr-only">搜索网站和收藏</span
+            ><input
+              id="site-search"
+              type="search"
+              placeholder="搜索网站和收藏…"
+          /></label>
+        </div>
+        <div id="default-sites" class="site-grid"></div>
+        <div class="bookmarks-heading">
+          <h2>我的收藏</h2>
+          <span id="bookmark-count" class="muted"></span>
+        </div>
+        <div id="bookmarks" class="site-grid"></div>
+        <p id="bookmark-empty" class="empty-note">
+          把常用网站添进来，也可以在网页上右键收藏。
+        </p>
+        <form id="bookmark-form" class="bookmark-form">
+          <h3>添加一个常用网站</h3>
+          <div class="bookmark-fields">
+            <label for="bookmark-title"
+              >网站名称<input
+                id="bookmark-title"
+                maxlength="100"
+                required
+                placeholder="例如：我的博客" /></label
+            ><label for="bookmark-url"
+              >网站地址<input
+                id="bookmark-url"
+                type="url"
+                required
+                maxlength="4096"
+                placeholder="https://example.com" /></label
+            ><button class="primary" type="submit">
+              <span aria-hidden="true">＋ </span>添加收藏
+            </button>
+          </div>
+        </form>
+      </section>
+      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+      <footer class="page-footer">
+        <span>听见生活，看见喜欢。</span><span>视听魔盒 · Zeno Zhao</span>
+      </footer>
+    </main>
+  </body>
+</html>

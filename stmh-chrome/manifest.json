@@ -1,27 +1,19 @@
-﻿{
-   "name": "视听魔盒",
-   "version": "0.0.2",
-   "manifest_version": 2,
-   "homepage_url": "https://zcjun.com",
-    "description": "集音乐、视频、壁纸于一体的三合一浏览器插件。本扩展工具封装视频二次解析与MkOnlinePlayer以及同作者作品壁纸网站。",
-    "icons":
-  {
+{
+  "manifest_version": 3,
+  "name": "视听魔盒 · 音乐、视频、壁纸与导航",
+  "version": "1.0.0",
+  "minimum_chrome_version": "120",
+  "description": "本地音乐歌单、视频播放与截图、高清壁纸生成、常用网站收藏。核心功能离线可用，无需账号。",
+  "homepage_url": "https://github.com/zcjunblog/stmh-chrome-Browser-extensions",
+  "icons": {
     "16": "icon_16x16.png",
     "48": "icon_48x48.png",
     "128": "icon_128x128.png"
   },
-   "browser_action":
-{
-	"default_title": "视听畅享，为所欲为！！By zcjun.com",
-	"default_popup": "popup.html"
-},
-"content_scripts": [ {
-     "js": [ "js/jx.js"],
-     "matches": ["*://*.iqiyi.com/*", "*://*.youku.com/*", "*://*.le.com/*","*://*.mgtv.com/*","*://v.qq.com/*","*://*.sohu.com/*","*://*.wasu.cn/*","*://*.pptv.com/*"],
-     "run_at": "document_end"
-  }],
-   "background":{
-      "scripts": ["js/background.js"]
-   },
-   "permissions": ["contextMenus","tabs","http://*/","https://*/"]
+  "action": { "default_title": "打开视听魔盒", "default_popup": "popup.html" },
+  "background": { "service_worker": "js/background.js", "type": "module" },
+  "permissions": ["storage", "contextMenus", "activeTab"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'self';"
+  }
 }
