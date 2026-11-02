@@ -1,4 +1,5 @@
 import { addBookmark, normalizeUrl } from "./core.mjs";
+import { parserUrl, playbackPatterns, videoPage } from "./parser.mjs";
 
 // Serialize read-modify-write operations across popup, toolbox and context menus.
 let writes = Promise.resolve();
@@ -42,6 +43,12 @@ function updateProgress(key, time) {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.removeAll(() => {
     chrome.contextMenus.create({
+      id: "stmh-parse",
+      title: "视听魔盒：一键解析当前视频",
+      contexts: ["page", "video"],
+      documentUrlPatterns: playbackPatterns,
+    });
+    chrome.contextMenus.create({
       id: "stmh-save",
       title: "收藏到视听魔盒",
       contexts: ["page", "link"],
@@ -63,7 +70,12 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   (async () => {
-    if (info.menuItemId === "stmh-save") {
+    if (info.menuItemId === "stmh-parse") {
+      await chrome.tabs.create({
+        url: parserUrl(info.pageUrl || tab?.url),
+        openerTabId: tab?.id,
+      });
+    } else if (info.menuItemId === "stmh-save") {
       const url = info.linkUrl || info.pageUrl;
       await updateBookmarks((items) =>
         addBookmark(items, {
@@ -97,12 +109,28 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, reply) => {
-  if (
-    sender.id !== chrome.runtime.id ||
-    !sender.url?.startsWith(chrome.runtime.getURL(""))
-  )
-    return;
+  if (sender.id !== chrome.runtime.id) return;
+  const ownPage = sender.url?.startsWith(chrome.runtime.getURL(""));
+  if (!ownPage && (!sender.tab || sender.frameId !== 0)) return;
   const run = async () => {
+    if (message.type === "parser:status" || message.type === "parser:open") {
+      let source = message.url;
+      if (!ownPage) {
+        // content_scripts do not grant the tabs API access to URL fields.
+        // MessageSender.url can retain the pre-SPA URL; accept the current
+        // document location only when its origin matches the sending document.
+        if (new URL(source).origin !== new URL(sender.url).origin)
+          throw new Error("视频地址与当前网页来源不一致。");
+      }
+      if (message.type === "parser:status") return videoPage(source);
+      const url = parserUrl(source);
+      await chrome.tabs.create({
+        url,
+        ...(sender.tab?.id ? { openerTabId: sender.tab.id } : {}),
+      });
+      return { opened: true };
+    }
+    if (!ownPage) throw new Error("此操作仅供扩展页面使用。");
     if (message.type === "bookmark:list") {
       await writes;
       return (await chrome.storage.local.get({ bookmarks: [] })).bookmarks;

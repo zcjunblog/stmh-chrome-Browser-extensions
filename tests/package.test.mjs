@@ -22,12 +22,12 @@ test("two builds have identical ZIP bytes and include a checksum", () => {
         path.join(root, name),
       ]);
     assert.deepEqual(
-      readFileSync(path.join(root, "a/stmh-toolbox-1.0.0.zip")),
-      readFileSync(path.join(root, "b/stmh-toolbox-1.0.0.zip")),
+      readFileSync(path.join(root, "a/stmh-toolbox-1.1.0.zip")),
+      readFileSync(path.join(root, "b/stmh-toolbox-1.1.0.zip")),
     );
     assert.match(
       readFileSync(path.join(root, "a/SHA256SUMS"), "utf8"),
-      /^[a-f0-9]{64}  stmh-toolbox-1.0.0.zip\n$/,
+      /^[a-f0-9]{64}  stmh-toolbox-1.1.0.zip\n$/,
     );
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -77,6 +77,30 @@ test("packaging refuses symlinks to files outside the extension", () => {
     );
     assert.notEqual(result.status, 0);
     assert.match(result.stderr, /符号链接/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("packaging refuses a missing manifest-declared webpage button script", () => {
+  const root = mkdtempSync(path.join(tmpdir(), "stmh-content-"));
+  try {
+    const source = path.join(root, "source");
+    cpSync("stmh-chrome", source, { recursive: true });
+    unlinkSync(path.join(source, "js/content-parser.js"));
+    const result = spawnSync(
+      "python3",
+      [
+        "scripts/package.py",
+        "--source",
+        source,
+        "--out-dir",
+        path.join(root, "out"),
+      ],
+      { encoding: "utf8" },
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /content-parser.js/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

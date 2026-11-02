@@ -11,12 +11,12 @@
     <header class="popup-header">
       <span class="brand-mark" aria-hidden="true">m<span>•</span></span
       ><span class="brand-name">视听魔盒<small>MEDIA TOOLBOX</small></span
-      ><span class="version">1.0</span>
+      ><span class="version">1.1</span>
     </header>
     <main>
       <p class="eyebrow">TAKE A LITTLE BREAK</p>
-      <h1>给日常，留点好时光<span class="orange">。</span></h1>
-      <p class="muted intro">听一首歌，看一段影片，换一张壁纸。</p>
+      <h1>视频网页，一键解析<span class="orange">。</span></h1>
+      <p class="muted intro">在视频播放页使用，无需导入文件。</p>
       <div class="launch-grid">
         <a
           class="launch-card"
@@ -27,15 +27,12 @@
           ><strong>听点音乐</strong><small>本地歌单 · 进度记忆</small
           ><span class="card-arrow" aria-hidden="true">↗</span></a
         >
-        <a
-          class="launch-card"
-          href="toolbox.html?tool=video"
-          target="_blank"
-          rel="noopener"
-          ><span class="tool-symbol" aria-hidden="true">▷</span
-          ><strong>看段视频</strong><small>本地播放 · 画面截图</small
-          ><span class="card-arrow" aria-hidden="true">↗</span></a
-        >
+        <button id="parse-current" class="launch-card" type="button" disabled>
+          <span class="tool-symbol" aria-hidden="true">▷</span
+          ><strong>一键解析</strong
+          ><small id="current-video">识别当前视频网页…</small
+          ><span class="card-arrow" aria-hidden="true">↗</span>
+        </button>
         <a
           class="launch-card"
           href="toolbox.html?tool=wallpaper"
@@ -55,11 +52,16 @@
           ><span class="card-arrow" aria-hidden="true">↗</span></a
         >
       </div>
+      <p class="parser-link">
+        <a href="parser.html" target="_blank" rel="noopener"
+          >粘贴视频网址 / 查看内置线路 ↗</a
+        >
+      </p>
       <button id="save-current" class="secondary wide">＋ 收藏当前网页</button>
       <p id="feedback" role="status" class="feedback"></p>
     </main>
     <footer class="popup-footer">
-      <span><i class="status-dot"></i>核心功能离线可用</span
+      <span><i class="status-dot"></i>解析线路：TXNP（第三方）</span
       ><a
         href="https://github.com/zcjunblog/stmh-chrome-Browser-extensions"
         target="_blank"

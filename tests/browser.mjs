@@ -6,6 +6,7 @@ import path from "node:path";
 import http from "node:http";
 import { execFileSync } from "node:child_process";
 import { verifyMediaRaces } from "./media-races.mjs";
+import { verifyWebpageParser } from "./parser-browser.mjs";
 
 const root = await mkdtemp(path.join(tmpdir(), "stmh-browser-"));
 let context;
@@ -26,7 +27,10 @@ try {
     "-m",
     "zipfile",
     "-e",
-    path.join(root, "release/stmh-toolbox-1.0.0.zip"),
+    path.join(
+      root,
+      `release/stmh-toolbox-${JSON.parse(await readFile("stmh-chrome/manifest.json", "utf8")).version}.zip`,
+    ),
     path.join(root, "unpacked"),
   ]);
   const extension = path.join(root, "unpacked/stmh-chrome");
@@ -262,9 +266,14 @@ try {
     fullPage: true,
   });
   await verifyMediaRaces(page, base, videoBytes);
+  await verifyWebpageParser(
+    context,
+    base,
+    process.env.STMH_SCREENSHOTS || "test-results",
+  );
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: MV3 loads; bookmarks persist and serialize; invalid URLs rejected; real audio/video decode and play; resume; invalid-media feedback; frame capture; 4K PNG; narrow layout; no page errors.",
+    "PASS: MV3 loads; bookmarks persist and serialize; invalid URLs rejected; real audio/video decode and play; resume; invalid-media feedback; frame capture; 4K PNG; webpage parser button, SPA URL changes and manual parser URL routing; narrow layout; no page errors.",
   );
 } catch (error) {
   await mkdir("test-results", { recursive: true });
