@@ -4,7 +4,7 @@
 
 > **新版说明：** 1.0.0 已升级为 Manifest V3，并重新实现四个工具。音乐与视频以用户选择的本地文件为主；视频另支持媒体直链，**不提供会员视频解析、去广告或网易云歌单同步**。壁纸由插件本地生成。旧版网站入口和 CRX 不再作为新版安装方式。
 
-[安装方法](#安装) · [四个工具](#四个工具) · [开发与验证](#开发与验证) · [隐私说明](PRIVACY.md) · [更新记录](CHANGELOG.md)
+[下载安装包](https://github.com/zcjunblog/stmh-chrome-Browser-extensions/releases/latest) · [安装方法](#安装) · [四个工具](#四个工具) · [开发与验证](#开发与验证) · [隐私说明](PRIVACY.md) · [更新记录](CHANGELOG.md)
 
 ![视听魔盒音乐工具页](docs/images/music.png)
 
