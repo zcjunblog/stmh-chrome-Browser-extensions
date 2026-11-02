@@ -19,7 +19,7 @@
 
 ## Review Focus
 
-- 带脚本协议、账号密码、控制字符及损坏导入的链接不得执行。
+- 带脚本协议、账号密码及控制字符的链接不得执行。
 - 多页面收藏写入不能丢失修改；收藏上限有明确反馈。
 - 切换音视频、重选文件及异步加载时不串用进度或泄漏 object URL。
 - 全屏、窄屏、键盘及深浅主题不遮挡播放器和表单。
@@ -30,24 +30,24 @@
 **Files:** `stmh-chrome/js/core.mjs`, `tests/core.test.mjs`
 **Interfaces:** normalizeUrl(value), addBookmark(items,input), fileKey(file), resumeTime(saved,duration), formatTime(seconds).
 
-- [ ] 写入并运行失败测试：拒绝非 HTTP(S)/带账号 URL；收藏去重及上限；不同文件的进度隔离；完成播放后从头开始。
-- [ ] 实现纯函数，运行 `node --test tests/core.test.mjs`，通过后提交。
+- [x] 写入并运行失败测试：拒绝非 HTTP(S)/带账号 URL；收藏去重及上限；不同文件的进度隔离；完成播放后从头开始。
+- [x] 实现纯函数，运行 `node --test tests/core.test.mjs`，通过后提交。
 
 ### Task 2: MV3 与四个工具
 
 **Files:** manifest、popup、toolbox、media、wallpaper、navigation 模块和样式。
 **Interfaces:** worker messages bookmark:list/add/remove，工具页 `?tool=music|video|wallpaper|navigation`。
 
-- [ ] 写浏览器验收脚本并运行，确认当前 MV2 安装不满足验收。
-- [ ] 实现四个工具、弹窗和右键入口；删去失效 iframe、旧注入脚本和旧 CRX。
-- [ ] Chromium 真实测试本地 WAV/视频、进度恢复、直链错误提示、收藏存储、壁纸 PNG 导出。
-- [ ] 运行全部测试；检查真实截图后提交。
+- [x] 写浏览器验收脚本并运行，确认当前 MV2 安装不满足验收。
+- [x] 实现四个工具、弹窗和右键入口；删去失效 iframe、旧注入脚本和旧 CRX。
+- [x] Chromium 真实测试本地 WAV/视频、进度恢复、直链错误提示、收藏存储、壁纸 PNG 导出。
+- [x] 运行全部测试；检查真实截图后提交。
 
 ### Task 3: 交付
 
 **Files:** scripts/package.py、package.json、README、隐私说明、CI、docs/images。
 
-- [ ] 测试包内资源校验与两次打包哈希一致。
-- [ ] 生成真实截图、更新 README、隐私与变更说明。
-- [ ] 完成独立代码审查与必要修复，运行完整 Node/浏览器测试。
-- [ ] 推送分支并创建 PR，提供可安装 ZIP。是否合并默认交付到可审阅 PR，未获得针对本仓库的合并要求时不自动合并。
+- [x] 测试包内资源校验与两次打包哈希一致。
+- [x] 生成真实截图、更新 README、隐私与变更说明。
+- [x] 完成独立代码审查与必要修复，运行完整 Node/浏览器测试。
+- [ ] 推送分支并创建 PR，提供可安装 ZIP。用户已委托实现升级；独立审查修复和云端检查通过后，将更新合并并发布可安装版本。

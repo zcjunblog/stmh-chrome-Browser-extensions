@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import http from "node:http";
 import { execFileSync } from "node:child_process";
+import { verifyMediaRaces } from "./media-races.mjs";
 
 const root = await mkdtemp(path.join(tmpdir(), "stmh-browser-"));
 let context;
@@ -141,26 +142,22 @@ try {
   await page.waitForFunction(
     () => document.querySelector("#audio").currentTime >= 5,
   );
-  await page
-    .locator("#media-files")
-    .setInputFiles({
-      name: "invalid.mp3",
-      mimeType: "audio/mpeg",
-      buffer: Buffer.from("not media"),
-    });
+  await page.locator("#media-files").setInputFiles({
+    name: "invalid.mp3",
+    mimeType: "audio/mpeg",
+    buffer: Buffer.from("not media"),
+  });
   await page
     .getByRole("status")
     .filter({ hasText: /无法播放/ })
     .waitFor();
 
   await page.goto(`${base}/toolbox.html?tool=video`);
-  await page
-    .locator("#media-files")
-    .setInputFiles({
-      name: "sample.webm",
-      mimeType: "video/webm",
-      buffer: videoBytes,
-    });
+  await page.locator("#media-files").setInputFiles({
+    name: "sample.webm",
+    mimeType: "video/webm",
+    buffer: videoBytes,
+  });
   await page.waitForFunction(
     () => document.querySelector("#video").readyState >= 2,
   );
@@ -170,7 +167,8 @@ try {
   );
   await page.getByRole("button", { name: "全屏", exact: true }).click();
   await page.waitForFunction(
-    () => !!document.fullscreenElement && document.querySelector("#video").controls,
+    () =>
+      !!document.fullscreenElement && document.querySelector("#video").controls,
   );
   assert.equal(
     await page.locator("#video").evaluate((video) => video.controls),
@@ -230,6 +228,7 @@ try {
     false,
   );
   await page.setViewportSize({ width: 1360, height: 1000 });
+  await page.reload();
   await page.locator("#media-files").setInputFiles(audioFile);
   await page.waitForFunction(
     () => document.querySelector("#audio").readyState >= 1,
@@ -247,7 +246,9 @@ try {
     0,
   );
   for (const title of ["one", "two"]) {
-    await page.getByRole("button", { name: `删除 ${title}`, exact: true }).click();
+    await page
+      .getByRole("button", { name: `删除 ${title}`, exact: true })
+      .click();
   }
   await page.getByRole("link", { name: /壁纸/ }).click();
   await page.getByRole("link", { name: /导航/ }).click();
@@ -260,6 +261,7 @@ try {
     path: `${process.env.STMH_SCREENSHOTS || "test-results"}/navigation-dark.png`,
     fullPage: true,
   });
+  await verifyMediaRaces(page, base, videoBytes);
   assert.deepEqual(errors, []);
   console.log(
     "PASS: MV3 loads; bookmarks persist and serialize; invalid URLs rejected; real audio/video decode and play; resume; invalid-media feedback; frame capture; 4K PNG; narrow layout; no page errors.",
@@ -267,7 +269,10 @@ try {
 } catch (error) {
   await mkdir("test-results", { recursive: true });
   const page = context?.pages().at(-1);
-  if (page) await page.screenshot({ path: "test-results/failure.png", fullPage: true }).catch(() => {});
+  if (page)
+    await page
+      .screenshot({ path: "test-results/failure.png", fullPage: true })
+      .catch(() => {});
   throw error;
 } finally {
   if (context) await context.close();

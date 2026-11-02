@@ -14,6 +14,7 @@ export function createMediaPlayer(tell) {
         index: -1,
         sequence: 0,
         lastSave: 0,
+        restoring: false,
       },
     ]),
   );
@@ -56,7 +57,13 @@ export function createMediaPlayer(tell) {
 
   async function saveProgress(session, force = false) {
     const item = session.items[session.index];
-    if (!item || !Number.isFinite(session.element.duration)) return;
+    if (
+      !item ||
+      session.restoring ||
+      session.element.error ||
+      !Number.isFinite(session.element.duration)
+    )
+      return;
     if (!force && Date.now() - session.lastSave < 2500) return;
     session.lastSave = Date.now();
     const result = await chrome.runtime.sendMessage({
@@ -77,10 +84,13 @@ export function createMediaPlayer(tell) {
       : "文件只在本机读取，不会上传。";
     $("queue-count").textContent =
       `${session.items.length} ${mode === "music" ? "首" : "个"}`;
-    $("play").disabled = !item || !!element.error;
+    $("play").disabled = !item || session.restoring || !!element.error;
     $("previous").disabled = session.items.length < 2;
     $("next").disabled = session.items.length < 2;
-    $("seek").disabled = !Number.isFinite(element.duration) || !!element.error;
+    $("seek").disabled =
+      session.restoring ||
+      !Number.isFinite(element.duration) ||
+      !!element.error;
     $("capture").disabled = !item || !element.videoWidth;
     $("fullscreen").disabled = !item;
     $("elapsed").textContent = formatTime(element.currentTime);
@@ -133,6 +143,9 @@ export function createMediaPlayer(tell) {
     if (sequence !== session.sequence) return;
     session.element.pause();
     session.loadController?.abort();
+    // Metadata is available before the asynchronous resume record is restored.
+    // Do not let pause/timeupdate/skip persist that temporary zero position.
+    session.restoring = true;
     const controller = new AbortController();
     session.loadController = controller;
     session.index = index;
@@ -153,10 +166,15 @@ export function createMediaPlayer(tell) {
             session.element.duration,
           );
           if (time) session.element.currentTime = time;
+          session.restoring = false;
           paint();
-          if (autoplay) await tryPlay(session);
+          if (autoplay && current() === session) await tryPlay(session);
         } catch (error) {
-          tell(error.message);
+          if (sequence === session.sequence && !controller.signal.aborted) {
+            session.restoring = false;
+            paint();
+            tell(error.message);
+          }
         }
       },
       { once: true, signal: controller.signal },
